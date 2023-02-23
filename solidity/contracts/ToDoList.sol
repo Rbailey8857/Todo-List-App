@@ -11,7 +11,7 @@ contract Todolist {
 
 
     struct ToDoListApp {
-        address acount; 
+        address account; 
         uint256 userId;
         string message;
         bool completed;
@@ -28,7 +28,7 @@ contract Todolist {
     mapping (address => ToDoListApp) public todolistapps;
 
     constructor() {
-        owner = msg.sender;
+        ownerOfContract = msg.sender;
     }
 
     function inc() internal {
@@ -39,5 +39,20 @@ contract Todolist {
         inc();
 
         uint256 idNumber = _idUser;
+        ToDoListApp storage toDo = todolistapps[msg.sender];
+
+        toDo.account = msg.sender;
+        toDo.message = _message;
+        toDo.completed = false;
+        toDo.userId = idNumber;
+
+        creators.push(msg.sender);
+        message.push(_message);
+        messageId.push(idNumber);
+
+        emit ToDoevent(msg.sender, toDo.userId, _message, toDo.completed);
 
     }
+
+
+}
