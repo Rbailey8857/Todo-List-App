@@ -32,14 +32,14 @@ contract Todolist {
         ownerOfContract = msg.sender;
     }
 
-    function increment() internal {
+    function inc() internal {
         _idUser++;
     }
     /// @notice Create New To-Do List
     /// @dev Explain to a developer any extra details
     /// @param _message a parameter needed to deploy the create the todolist with a title
     function createList(string calldata _message) external {
-        increment();
+        inc();
 
         uint256 idNumber = _idUser;
         ToDoListApp storage toDo = todolistapps[msg.sender];
