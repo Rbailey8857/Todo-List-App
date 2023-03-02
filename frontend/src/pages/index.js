@@ -8,6 +8,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from 'walletlink'
 import React from 'react';
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 
@@ -15,7 +16,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      infuraId: "2df30cadfe3e4702bac6294a7f50b6f3", // required
+      infuraId: process.env.APIKEY, // required
     },
   },
   'custom-walletlink': {
@@ -105,6 +106,7 @@ export default function Home() {
     const address = await signer.getAddress()
 
     const network = await web3Provider.getNetwork()
+    
 
     dispatch({
       type: 'SET_WEB3_PROVIDER',
