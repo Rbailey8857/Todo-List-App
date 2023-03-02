@@ -16,7 +16,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      infuraId: process.env.APIKEY, // required
+      infuraId: "2df30cadfe3e4702bac6294a7f50b6f3", // required
     },
   },
   'custom-walletlink': {
