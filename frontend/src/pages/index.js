@@ -3,14 +3,13 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Web3Modal from 'web3modal';
 import { useCallback, useEffect, useReducer } from 'react'
-import { ethers } from 'ethers';
 import { providers } from 'ethers'
-import {CoinbaseWalletSDK} from "@coinbase/wallet-sdk"
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from 'walletlink'
 import React from 'react';
 
 const inter = Inter({ subsets: ['latin'] })
+
 
 const providerOptions = {
   walletconnect: {
@@ -52,7 +51,44 @@ if (typeof window !== 'undefined') {
   })
 }
 
+const initialState = {
+  provider: null,
+  web3Provider: null,
+  address: null,
+  chainId: null,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SET_WEB3_PROVIDER':
+      return {
+        ...state,
+        provider: action.provider,
+        web3Provider: action.web3Provider,
+        address: action.address,
+        chainId: action.chainId,
+      }
+    case 'SET_ADDRESS':
+      return {
+        ...state,
+        address: action.address,
+      }
+    case 'SET_CHAIN_ID':
+      return {
+        ...state,
+        chainId: action.chainId,
+      }
+    case 'RESET_WEB3_PROVIDER':
+      return initialState
+    default:
+      throw new Error()
+  }
+}
+
 export default function Home() {
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const { provider, web3Provider, address, chainId } = state
 
 
   const connect = useCallback(async function () {
@@ -78,7 +114,23 @@ export default function Home() {
       chainId: network.chainId,
     })
   }, [])
-  
+
+  const disconnect = useCallback(
+    async function () {
+      await web3Modal.clearCachedProvider()
+      if (provider?.disconnect && typeof provider.disconnect === 'function') {
+        await provider.disconnect()
+      }
+      dispatch({
+        type: 'RESET_WEB3_PROVIDER',
+      })
+    },
+    [provider]
+  )
+
+
+
+
   return (
     <>
       <Head>
@@ -87,12 +139,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='h-screen flex items-center justify-center'>
-        <div className='text-primary font-gaj text-7xl font-bold text-center'>TaskMaster</div>
-        <div className='mt-8'>
-          <button className='text-secondary font-gaj text-5xl' onClick={connect}>Login</button>
-        </div>      
-      </div>
+        {web3Provider ? (
+          <>
+            <div className='relative'>
+              <button className="text-secondary font-gaj text-5xl absolute top-0 right-10" type="button" onClick={disconnect}>
+                Logout
+              </button>
+            </div>
+            <div>
+              {/* TODO */}
+            </div>
+          </>
+          
+        ) : (
+          //BEFORE LOGIN
+          <>
+            <div className='min-h-screen overflow-hidden flex flex-col justify-center items-center text-center'>
+  <h1 className='text-primary font-gaj text-4xl md:text-7xl font-bold mb-8'>
+    TaskMaster
+  </h1>
+  <button className='bg-secondary hover:bg-secondary-dark text-white font-gaj text-3xl md:text-5xl px-12 md:px-16 py-4 md:py-6 rounded-lg' type="button" onClick={connect}>
+    Login
+  </button>
+</div>
+s
+
+          </>
+          
+        )}
     </>
   )
 }
