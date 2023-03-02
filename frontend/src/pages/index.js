@@ -213,7 +213,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
-      <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg mt-4">
+      <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg mt-4" type="button" onClick={disconnect}>
         Logout
       </button>
     </div>
