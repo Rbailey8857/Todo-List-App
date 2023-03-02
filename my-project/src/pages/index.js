@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import { Web3Button } from "@web3modal/react";
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,9 +16,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <p className='font-gaj text-5xl text-base text-center mt-10'>
-      TaskMaster
-      </p>
+      <div>
+        <div>
+          <p className='font-gaj text-5xl text-base text-center mt-10'>
+            TaskMaster
+          </p>
+          
+        </div>
+          
+      </div>
     </>
   )
 }
