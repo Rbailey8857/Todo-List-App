@@ -12,11 +12,9 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {colors: {
-    bg: '#ECEFF1',
-    base: '#424242',
-    black: colors.black,
-    'white': '#ffffff',
-    red: colors.red
+    bg: '#1A237E',
+    primary: '#424242',
+    secondary: "#9E9E9E",
   },
     extend: {
       fontFamily: {
@@ -24,5 +22,5 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [require('prettier-plugin-tailwindcss')],
 }
