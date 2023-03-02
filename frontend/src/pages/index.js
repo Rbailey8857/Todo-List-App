@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Web3Modal from 'web3modal';
-import { useCallback, useEffect, useReducer } from 'react'
+import { useCallback, useEffect, useReducer, useState } from 'react'
 import { providers } from 'ethers'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from 'walletlink'
@@ -131,7 +131,50 @@ export default function Home() {
   )
 
 
+    // TODO-LIST FUNCTIONALITY
+    const [tasks, setTasks] = useState([
+      { id: 1, text: 'Task 1' },
+      { id: 2, text: 'Task 2' },
+      { id: 3, text: 'Task 3' },
+    ]);
+  
+    const [newTaskText, setNewTaskText] = useState('');
 
+    const [editingTaskId, setEditingTaskId] = useState(null);
+  
+    const handleNewTaskChange = (event) => {
+      setNewTaskText(event.target.value);
+    };
+  
+    const handleNewTaskSubmit = (event) => {
+      event.preventDefault();
+      if (newTaskText.trim() === '') {
+        return;
+      }
+      const newTask = {
+        id: Date.now(),
+        text: newTaskText,
+      };
+      setTasks([...tasks, newTask]);
+      setNewTaskText('');
+    };
+
+    const handleTaskEdit = (taskId, newText) => {
+      const updatedTasks = tasks.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, text: newText };
+        }
+        return task;
+      });
+      setTasks(updatedTasks);
+      setEditingTaskId(null);
+    };
+  
+    const handleTaskDelete = (taskId) => {
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
+      setTasks(updatedTasks);
+    };
+    
 
   return (
     <>
@@ -143,29 +186,52 @@ export default function Home() {
       </Head>
         {web3Provider ? (
           <>
-            <div className='relative'>
-              <button className="text-secondary font-gaj text-5xl absolute top-0 right-10" type="button" onClick={disconnect}>
-                Logout
-              </button>
+            <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center font-sans">
+  <div className="bg-white rounded-lg shadow-md w-full max-w-lg">
+    <div className="bg-secondary text-white font-gaj font-bold text-xl px-4 py-3 rounded-t-lg">
+      Todo List
+    </div>
+    <div className="p-4">
+      <form onSubmit={handleNewTaskSubmit} className="flex items-center mb-4">
+        <input type="text" className="rounded-lg border-gray-300 py-2 px-4 w-full" placeholder="Add task" value={newTaskText} onChange={handleNewTaskChange} />
+        <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg ml-2">
+          Add
+        </button>
+      </form>
+      <ul className="divide-y divide-gray-300">
+        {tasks.map((task) => (
+          <li key={task.id} className="py-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <input type="checkbox" className="h-4 w-4 text-secondary focus:ring-2 focus:ring-offset-2 focus:ring-secondary" />
+              <span className="ml-2 font-medium text-gray-900">
+                {task.text}
+              </span>
             </div>
-            <div>
-              {/* TODO */}
-            </div>
+            <button className="text-secondary hover:text-secondary-dark font-gaj font-medium" onClick={() => handleTaskDelete(task.id)}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+      <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg mt-4">
+        Logout
+      </button>
+    </div>
+  </div>
+</div>
           </>
           
         ) : (
           //BEFORE LOGIN
           <>
             <div className='min-h-screen overflow-hidden flex flex-col justify-center items-center text-center'>
-  <h1 className='text-primary font-gaj text-4xl md:text-7xl font-bold mb-8'>
-    TaskMaster
-  </h1>
-  <button className='bg-secondary hover:bg-secondary-dark text-white font-gaj text-3xl md:text-5xl px-12 md:px-16 py-4 md:py-6 rounded-lg' type="button" onClick={connect}>
-    Login
-  </button>
-</div>
-s
-
+              <h1 className='text-primary font-gaj text-4xl md:text-7xl font-bold mb-8'>
+                TaskMaster
+              </h1>
+              <button className='bg-secondary hover:bg-secondary-dark text-white font-gaj text-3xl md:text-5xl px-12 md:px-16 py-4 md:py-6 rounded-lg' type="button" onClick={connect}>
+                Login
+              </button>
+            </div>
           </>
           
         )}
