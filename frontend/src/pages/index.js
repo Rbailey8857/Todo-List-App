@@ -186,39 +186,40 @@ export default function Home() {
       </Head>
         {web3Provider ? (
           <>
+            {/* AFTER LOGIN */}
             <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center font-sans">
-  <div className="bg-white rounded-lg shadow-md w-full max-w-lg">
-    <div className="bg-secondary text-white font-gaj font-bold text-xl px-4 py-3 rounded-t-lg">
-      Todo List
-    </div>
-    <div className="p-4">
-      <form onSubmit={handleNewTaskSubmit} className="flex items-center mb-4">
-        <input type="text" className="rounded-lg border-gray-300 py-2 px-4 w-full" placeholder="Add task" value={newTaskText} onChange={handleNewTaskChange} />
-        <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg ml-2">
-          Add
-        </button>
-      </form>
-      <ul className="divide-y divide-gray-300">
-        {tasks.map((task) => (
-          <li key={task.id} className="py-4 flex items-center justify-between">
-            <div className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-secondary focus:ring-2 focus:ring-offset-2 focus:ring-secondary" />
-              <span className="ml-2 font-medium text-gray-900">
-                {task.text}
-              </span>
+              <div className="bg-white rounded-lg shadow-md w-full max-w-lg">
+                <div className="bg-secondary text-white font-gaj font-bold text-xl px-4 py-3 rounded-t-lg">
+                  Todo List
+                </div>
+                <div className="p-4">
+                  <form onSubmit={handleNewTaskSubmit} className="flex items-center mb-4">
+                    <input type="text" className="rounded-lg border-gray-300 py-2 px-4 w-full" placeholder="Add task" value={newTaskText} onChange={handleNewTaskChange} />
+                    <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg ml-2">
+                      Add
+                    </button>
+                  </form>
+                  <ul className="divide-y divide-gray-300">
+                    {tasks.map((task) => (
+                      <li key={task.id} className="py-4 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <input type="checkbox" className="h-4 w-4 text-secondary focus:ring-2 focus:ring-offset-2 focus:ring-secondary" />
+                          <span className="ml-2 font-medium text-gray-900">
+                            {task.text}
+                          </span>
+                        </div>
+                        <button className="text-secondary hover:text-secondary-dark font-gaj font-medium" onClick={() => handleTaskDelete(task.id)}>
+                          Delete
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg mt-4" type="button" onClick={disconnect}>
+                    Logout
+                  </button>
+                </div>
+              </div>
             </div>
-            <button className="text-secondary hover:text-secondary-dark font-gaj font-medium" onClick={() => handleTaskDelete(task.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-      <button className="bg-secondary hover:bg-secondary-dark text-white font-gaj font-medium px-4 py-2 rounded-lg mt-4" type="button" onClick={disconnect}>
-        Logout
-      </button>
-    </div>
-  </div>
-</div>
           </>
           
         ) : (
